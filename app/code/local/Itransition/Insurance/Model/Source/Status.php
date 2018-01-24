@@ -31,7 +31,7 @@
 class Itransition_Insurance_Model_Source_Status
 {
     const ENABLED = 1;
-    const DISABLED = 0;
+    const DISABLED = 2;
 
     /**
      * Options getter

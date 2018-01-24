@@ -92,23 +92,15 @@
                 <observers>
                     <insurance>
                         <class>insurance/observer</class>
-                        <method>checkout_controller_onepage_save_shipping_method</method>
+                        <method>checkoutControllerOnepageSaveShippingMethod</method>
                     </insurance>
                 </observers>
             </checkout_controller_onepage_save_shipping_method>
-            <adminhtml_block_system_config_init_tab_sections_before>
-                <observers>
-                    <insurance>
-                        <class>insurance/observer</class>
-                        <method>adminhtml_block_system_config_init_tab_sections_before</method>
-                    </insurance>
-                </observers>
-            </adminhtml_block_system_config_init_tab_sections_before>
             <checkout_cart_save_after>
                 <observers>
                     <insurance>
                         <class>insurance/observer</class>
-                        <method>checkout_cart_save_after</method>
+                        <method>checkoutCartSaveAfter</method>
                     </insurance>
                 </observers>
             </checkout_cart_save_after>

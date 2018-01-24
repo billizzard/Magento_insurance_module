@@ -45,19 +45,24 @@ class Itransition_Insurance_Helper_Data extends Mage_Core_Helper_Abstract
         ];
     }
 
+    public function isInsuranceEnabled()
+    {
+        return (bool) Mage::getStoreConfig('insurance/settings/enableField');
+    }
+
     public function getIsEnabled($shippingMethod)
     {
-        return (bool) Mage::getStoreConfig('carriers/' . $shippingMethod . '/insuranceEnable');
+        return (bool) Mage::getStoreConfig('insurance/rates/field_' . $shippingMethod . '_insuranceEnabled');
     }
 
     public function getType($shippingMethod)
     {
-        return Mage::getStoreConfig('carriers/' . $shippingMethod . '/insuranceType');
+        return Mage::getStoreConfig('insurance/rates/field_' . $shippingMethod . '_insuranceType');
     }
 
     public function getValue($shippingMethod)
     {
-        return Mage::getStoreConfig('carriers/' . $shippingMethod . '/insuranceValue');
+        return Mage::getStoreConfig('insurance/rates/field_' . $shippingMethod . '_insuranceValue');
     }
 
 }
