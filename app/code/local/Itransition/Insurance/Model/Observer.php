@@ -2,21 +2,27 @@
 
 class Itransition_Insurance_Model_Observer
 {
+    /**
+     * Change total value after choice shipping method
+     * @param Varien_Event_Observer $observer
+     * @return $this
+     */
     public function checkout_controller_onepage_save_shipping_method(Varien_Event_Observer $observer)
     {
         $isAccepted = (bool) Mage::app()->getRequest()->getParam('s_insurance');
         $isMethod = (bool) Mage::app()->getRequest()->getParam('shipping_method');
+        $helper  = Mage::helper('insurance');
         $address = $observer->getQuote()->getShippingAddress();
         if ($isMethod) {
             if ($isAccepted) {
                 $shippingMethod = $address->getShippingMethod();
                 if ($shippingMethod) {
                     $shippingMethod = explode('_', $shippingMethod)[0];
-                    $isEnabled = (bool)Mage::getStoreConfig('carriers/' . $shippingMethod . '/insuranceEnable');
+                    $isEnabled = (bool)$helper->getIsEnabled($shippingMethod);
                     if ($isEnabled) {
-                        $type = Mage::getStoreConfig('carriers/' . $shippingMethod . '/insuranceType');
-                        $value = Mage::getStoreConfig('carriers/' . $shippingMethod . '/insuranceValue');
-                        $insuranceCost = Itransition_Insurance_Helper_Data::getInsuranceCost($address->getSubtotal(), $type, $value);
+                        $type = $helper->getType($shippingMethod);
+                        $value = $helper->getValue($shippingMethod);
+                        $insuranceCost = $helper->getInsuranceCost($address->getSubtotal(), $type, $value);
                         $quote = $address->getQuote();
                         $quote->setItInsurance($insuranceCost);
                         $address->setItInsurance($insuranceCost);
@@ -31,6 +37,10 @@ class Itransition_Insurance_Model_Observer
         return $this;
     }
 
+    /**
+     * Add fields to bottom for all shipping methods in config
+     * @param $observer
+     */
     public function adminhtml_block_system_config_init_tab_sections_before($observer) {
         /** @var Mage_Core_Model_Config_Element $section */
         $section = $observer->getSection();
@@ -70,6 +80,32 @@ class Itransition_Insurance_Model_Observer
                 $groups->{$key}->fields->insuranceValue->addChild('validate', 'required-entry validate-number');
                 $groups->{$key}->fields->insuranceValue->addChild('depends');
                 $groups->{$key}->fields->insuranceValue->depends->addChild('insuranceEnable', '1');
+            }
+        }
+    }
+
+    /**
+     * Change total after change quantity or shippnig method in cart
+     * @param $observer
+     */
+    public function checkout_cart_save_after($observer)
+    {
+        $quote = $observer->getCart()->getQuote();
+        $address = $quote->getShippingAddress();
+        $shippingMethod = $address->getShippingMethod();
+        $helper  = Mage::helper('insurance');
+        if ($shippingMethod) {
+            $shippingMethod = explode('_', $shippingMethod)[0];
+            $isEnabled = (bool)$helper->getIsEnabled($shippingMethod);;
+            if ($isEnabled) {
+                $type = $helper->getType($shippingMethod);
+                $value = $helper->getValue($shippingMethod);
+                $insuranceCost = $helper->getInsuranceCost($address->getSubtotal(), $type, $value);
+                $oldInsurance = $address->getItInsurance();
+                $quote->setItInsurance($insuranceCost);
+                $address->setItInsurance($insuranceCost);
+                $address->setGrandTotal($address->getGrandTotal() + $insuranceCost - $oldInsurance);
+                $address->setBaseGrandTotal($address->getBaseGrandTotal() + $insuranceCost - $oldInsurance);
             }
         }
     }

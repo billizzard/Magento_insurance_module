@@ -104,6 +104,14 @@
                     </insurance>
                 </observers>
             </adminhtml_block_system_config_init_tab_sections_before>
+            <checkout_cart_save_after>
+                <observers>
+                    <insurance>
+                        <class>insurance/observer</class>
+                        <method>checkout_cart_save_after</method>
+                    </insurance>
+                </observers>
+            </checkout_cart_save_after>
         </events>
 
         <resources>
@@ -139,18 +147,6 @@
             </modules>
         </translate>
     </frontend>
-
-    <admin>
-        <routers>
-            <adminhtml>
-                <args>
-                    <modules>
-                        <siteblocks before="Mage_Adminhtml">Itransition_Insurance_Adminhtml</siteblocks>
-                    </modules>
-                </args>
-            </adminhtml>
-        </routers>
-    </admin>
 
     <default>
         <insurance>

@@ -1,6 +1,6 @@
 <?php
-class Itransition_Insurance_Helper_Data extends Mage_Core_Helper_Abstract {
-
+class Itransition_Insurance_Helper_Data extends Mage_Core_Helper_Abstract
+{
     public static function getInsuranceCost($total, $type, $value)
     {
         switch ($type) {
@@ -16,6 +16,10 @@ class Itransition_Insurance_Helper_Data extends Mage_Core_Helper_Abstract {
         return 0;
     }
 
+    /**
+     * Add line with Insurance description to all totals
+     * @param $class
+     */
     public function addTotals($class)
     {
         $order = $class->getOrder();
@@ -55,6 +59,5 @@ class Itransition_Insurance_Helper_Data extends Mage_Core_Helper_Abstract {
     {
         return Mage::getStoreConfig('carriers/' . $shippingMethod . '/insuranceValue');
     }
-
 
 }
