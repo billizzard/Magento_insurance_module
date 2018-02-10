@@ -1,0 +1,31 @@
+<div id="insure-info" style="display:none">
+    <dt><?php echo $this->__('Insurance available') ?></dt>
+    <dd>
+        <ul>
+            <li>
+                <input name="s_insurance" id="s_insurance" type="checkbox" value="1" class="checkbox">
+                <label for="s_insurance" >
+                    <?php echo $this->__('Include insurance') ?><br>
+                    <b><span id="s_insurance_cost"></span></b>
+                </label>
+            </li>
+        </ul>
+    </dd>
+</div>
+
+<style>
+    #insure-info li {
+        color: #636363;
+        background-color: #f4f4f4;
+        float: none;
+        padding: 6px 10px 6px 14px;
+    }
+    #insure-info dt {
+        margin: 13px 0 5px;
+        font-weight: bold;
+    }
+</style>
+
+<script>
+   new InsuranceShipping(<?php echo json_encode($this->getInsuranceData()) ?>)
+</script>
